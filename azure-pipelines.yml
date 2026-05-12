@@ -41,6 +41,21 @@ stages:
             command: 'plan'
             environmentServiceNameAzureRM: 'pileline-sc'
 
+  - stage: apply
+    displayName: apply stage
+    dependsOn: pre_build
+    jobs:
+      - job: apply
+        displayName: apply job
+        steps:
+        - task: TerraformTask@5
+          displayName: apply task
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            environmentServiceNameAzureRM: 'pileline-sc'
+
+
 
 
 
