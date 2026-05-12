@@ -42,6 +42,10 @@ stages:
             environmentServiceNameAzureRM: 'pileline-sc'
 
   - stage: apply
+    condition:  and(
+      succeeded(),
+      eq(variables['Build.SourceBranch'], 'refs/heads/main')
+     )
     displayName: apply stage
     dependsOn: pre_build
     jobs:
