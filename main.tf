@@ -6,6 +6,8 @@ resource "azurerm_resource_group" "rg" {
     owner = "rakesh"
     managedby = "devops"
     team = "cloud"
+    teammember = "Narendra"
+    environment = "production"
   }
 }
 
