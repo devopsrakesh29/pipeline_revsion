@@ -21,6 +21,7 @@ stages:
           inputs:
             terraformVersion: 'latest'
       - job: prebuild
+        dependsOn: tf_setup
         displayName: terraform plan
         steps:
         - task: TerraformTask@5
