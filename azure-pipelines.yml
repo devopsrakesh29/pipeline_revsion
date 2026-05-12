@@ -49,6 +49,15 @@ stages:
         displayName: apply job
         steps:
         - task: TerraformTask@5
+          displayName: terraform init task
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'pileline-sc'
+            backendAzureRmStorageAccountName: 'tfbackendstg123'
+            backendAzureRmContainerName: 'tfstate'
+            backendAzureRmKey: 'dev.terraform.tfstate'
+        - task: TerraformTask@5
           displayName: apply task
           inputs:
             provider: 'azurerm'
