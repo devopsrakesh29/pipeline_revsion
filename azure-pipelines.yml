@@ -1,0 +1,75 @@
+trigger:
+ branches:
+   include:
+     - main
+     - feature/*
+
+pool: 
+ name: pipeline-agent
+
+
+stages:
+  - stage: pre_build
+    displayName: pre build 1
+    jobs: 
+      - job: tf_setup
+        pool: pipeline-agent
+        displayName: tf_setup
+        steps:
+        - task: TerraformInstaller@1
+          displayName: tf_setup
+          inputs:
+            terraformVersion: 'latest'
+      - job: prebuild
+        dependsOn: tf_setup
+        displayName: terraform plan
+        steps:
+        - task: TerraformTask@5
+          displayName: tf init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'pileline-sc'
+            backendAzureRmStorageAccountName: 'tfbackendstg123'
+            backendAzureRmContainerName: 'tfstate'
+            backendAzureRmKey: 'dev.terraform.tfstate'
+
+        - task: TerraformTask@5
+          displayName: tf plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            environmentServiceNameAzureRM: 'pileline-sc'
+
+  - stage: apply
+    condition:  and(
+      succeeded(),
+      eq(variables['Build.SourceBranch'], 'refs/heads/main')
+     )
+    displayName: apply stage
+    dependsOn: pre_build
+    jobs:
+      - job: apply
+        displayName: apply job
+        steps:
+        - task: TerraformTask@5
+          displayName: terraform init task
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'pileline-sc'
+            backendAzureRmStorageAccountName: 'tfbackendstg123'
+            backendAzureRmContainerName: 'tfstate'
+            backendAzureRmKey: 'dev.terraform.tfstate'
+        - task: TerraformTask@5
+          displayName: apply task
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            environmentServiceNameAzureRM: 'pileline-sc'
+
+
+
+
+
+
