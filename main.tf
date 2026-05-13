@@ -8,6 +8,7 @@ resource "azurerm_resource_group" "rg" {
     team = "cloud"
     teammember = "Narendra"
     environment = "production"
+    name = "rakesh"
   }
 }
 
