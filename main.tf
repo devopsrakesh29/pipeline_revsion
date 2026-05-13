@@ -8,6 +8,7 @@ resource "azurerm_resource_group" "rg" {
     team = "cloud"
     teammember = "Narendra"
     environment = "production"
+    date = "2024-06-30"
   }
 }
 
