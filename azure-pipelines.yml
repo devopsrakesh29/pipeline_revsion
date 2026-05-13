@@ -41,6 +41,18 @@ stages:
             command: 'plan'
             environmentServiceNameAzureRM: 'pileline-sc'
 
+  - stage: ManualValidation
+    dependsOn: pre_build
+    displayName: Manual Validation
+    jobs:
+      - job: ManualValidation
+        pool: server
+        displayName: Manual Validation job
+        steps:
+        - task: ManualValidation@1
+          displayName: manual validation task
+          inputs:
+            notifyUsers: 'singhrakesh2986@gmail.com'
   - stage: apply
     condition:  and(
       succeeded(),
